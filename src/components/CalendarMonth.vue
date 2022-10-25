@@ -1,39 +1,20 @@
-<script setup>
-
+<script setup lang="ts">
 import moment from "moment"
-import { ref, onMounted } from "vue"
+import { ref, onBeforeMount } from "vue"
+import type { Ref } from "vue"
 
-const props = defineProps({
-  displayEventButton: {
-    type: Boolean,
-    required: false,
-    default: true,
-  },
-  displayWeekNumbers: {
-    type: Boolean,
-    required: false,
-    default: true,
-  },
-  displayYear: {
-    type: Boolean,
-    required: false,
-    default: false,
-  },
-  weekdayNames: {
-    type: Array,
-    required: false,
-    default(rawProps) {
-      return ["M", "T", "W", "T", "F", "S", "S"]
-    },
-    validator(value) {
-      return value.length === 7
-    },
-  },
-  buttonCaption: {
-    type: String,
-    required: false,
-    default: "Add event",
-  },
+const props = withDefaults(defineProps<{
+  hasEventButton?: boolean
+  hasWeekNumbers?: boolean
+  hasYear?: boolean
+  weekdayNames?: string[]
+  eventButtonName?: string
+}>(), {
+  hasEventButton: true,
+  hasWeekNumbers: true,
+  hasYear: false,
+  weekdayNames: () => ["M", "T", "W", "T", "F", "S", "S"],
+  eventButtonName: "Add event",
 })
 
 const month = ref(moment().format("YYYY-MM"))
@@ -44,11 +25,11 @@ const daysInMonth = ref(moment(month.value).daysInMonth())
 const daysInMonthPrev = ref(moment(prevMonth.value).daysInMonth())
 const firstDay = ref(moment(month.value).startOf("month").isoWeekday())
 const lastDay = ref(moment(month.value).endOf("month").isoWeekday())
-const days = ref([])
-const weekNumbers = ref([])
-const activeDate = ref(null)
+const days: Ref<string[]> = ref([])
+const weekNumbers: Ref<string[]> = ref([])
+const activeDate = ref("")
 
-function getMonthDays(monthOffset) {
+function paginate(monthOffset?: number) {
   month.value = moment(month.value).add(monthOffset, "months").format("YYYY-MM")
   prevMonth.value = moment(month.value).add(-1, "months").format("YYYY-MM")
   nextMonth.value = moment(month.value).add(1, "months").format("YYYY-MM")
@@ -57,56 +38,47 @@ function getMonthDays(monthOffset) {
   firstDay.value = moment(month.value).startOf("month").isoWeekday()
   lastDay.value = moment(month.value).endOf("month").isoWeekday()
   days.value = []
-
-  // previous month days
+  // prefix days from previous month
   for (let n = daysInMonthPrev.value - firstDay.value + 2; n <= daysInMonthPrev.value; n++) {
     days.value.push(prevMonth.value + "-" + n)
   }
-
-  // current month days
+  // set days for current month
   for (let n = 1; n <= daysInMonth.value; n++) {
     let date = n.toString()
     if (date.length < 2) date = "0" + n
     days.value.push(month.value + "-" + date)
   }
-
-  // next month days
+  // postfix days from following month
   for (let n = 1; n <= 7 - lastDay.value; n++) {
     let date = n.toString()
     if (date.length < 2) date = "0" + n
     days.value.push(nextMonth.value + "-" + date)
   }
-
-  // add 6th week if missing
+  // ensure 6th week always present
   while (days.value.length < 42) {
     let date = moment(days.value[days.value.length - 1]).add(1, "days").format("YYYY-MM-DD")
     days.value.push(date)
   }
-
-  // update week numbers
-  getWeekNumbers()
-}
-
-function getWeekNumbers() {
+  // set week numbers for current page
   weekNumbers.value = []
-  let m = []
+  let m: string[] = []
   for (let n of days.value) m.push(moment(n).format("ww"))
   weekNumbers.value = m.filter((v, i) => m.indexOf(v) === i)
   while (weekNumbers.value.length > 6) weekNumbers.value.pop()
 }
 
-function toggleActiveDate(date) {
-  activeDate.value = activeDate.value === date ? null : date
+function toggleActiveDate(date: string) {
+  activeDate.value = activeDate.value === date ? "" : date
 }
 
-onMounted(() => {
-  getMonthDays()
+onBeforeMount(() => {
+  paginate()
 })
 </script>
 
 <template>
   <div class="flex">
-    <div v-if="displayWeekNumbers">
+    <div v-if="hasWeekNumbers">
       <div class="grid grid-cols-1 w-8 text-[0.7rem] pt-[3.3rem]">
         <div 
           class="w-8 h-8 grid justify-center content-center text-gray-400 font-[650]" 
@@ -117,17 +89,17 @@ onMounted(() => {
       </div>
     </div>
     <div>
-      <div class="flex grid-cols-3 w-56 justify-between">
-        <div class="text-gray-400 text-sm grid content-center cursor-pointer" @click="getMonthDays(-1)">
+      <div class="flex grid-cols-3 w-56 justify-between select-none">
+        <div class="text-gray-400 text-sm grid content-center cursor-pointer" @click="paginate(-1)">
           <font-awesome-icon icon="fa-solid fa-angle-left" />
         </div>
         <div class="font-[650] text-sm">
           {{moment(month).format('MMMM')}}
-          <span v-if="displayYear">
+          <span v-if="hasYear">
             {{moment(month).format('YYYY')}}
           </span>
         </div>
-        <div class="text-gray-400 text-sm grid content-center cursor-pointer" @click="getMonthDays(1)">
+        <div class="text-gray-400 text-sm grid content-center cursor-pointer" @click="paginate(1)">
           <font-awesome-icon icon="fa-solid fa-angle-right" />
         </div>
       </div>
@@ -168,7 +140,7 @@ onMounted(() => {
         </button>
       </div>
       <div 
-        v-if="displayEventButton"
+        v-if="hasEventButton"
         @click="$emit('addEvent')"
         class="
           grid 
@@ -184,7 +156,7 @@ onMounted(() => {
           select-none
         "
       >
-        {{buttonCaption}}
+        {{eventButtonName}}
       </div>
     </div>
   </div>
