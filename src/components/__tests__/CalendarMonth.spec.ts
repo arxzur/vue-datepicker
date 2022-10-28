@@ -4,32 +4,22 @@ import { mount } from '@vue/test-utils'
 import CalendarMonth from '../CalendarMonth.vue'
 
 describe('CalendarMonth', () => {
-  it('renders all calendar buttons', () => {
-    const wrapper = mount(CalendarMonth, {
-      global: {
-        stubs: {
-          FontAwesomeIcon: true
-        }
+  const wrapper = mount(CalendarMonth, {
+    global: {
+      stubs: {
+        FontAwesomeIcon: true
       }
-    })
+    },
+    props: { eventButtonName: 'My event button text' }
+  })
 
+  it('renders all calendar buttons', () => {
     expect(wrapper.findAll('button')).toHaveLength(42)
   })
   it('renders event button text', () => {
-    const wrapper = mount(CalendarMonth, {
-      global: {
-        stubs: {
-          FontAwesomeIcon: true
-        }
-      },
-      props: { eventButtonName: 'Hello Vitest' }
-    })
-
-    expect(wrapper.text()).toContain('Hello Vitest')
+    expect(wrapper.text()).toContain('My event button text')
   })
 
-  // snapshot
-  // before each
   // props
   // events emmitting
 
