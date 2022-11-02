@@ -19,8 +19,9 @@ describe('CalendarMonth', () => {
   it('renders event button text', () => {
     expect(wrapper.text()).toContain('My event button text')
   })
+  it('emits event on button click', async () => {
+    await wrapper.find('#event-button').trigger('click')
 
-  // props
-  // events emmitting
-
+    expect(wrapper.emitted('addEvent')).toBeTruthy()
+  })
 })

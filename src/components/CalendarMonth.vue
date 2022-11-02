@@ -140,6 +140,7 @@ onBeforeMount(() => {
         </button>
       </div>
       <div 
+        id="event-button"
         v-if="hasEventButton"
         @click="$emit('addEvent')"
         class="
