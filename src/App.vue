@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import CalendarMonth from "./components/CalendarMonth.vue"
+import VueDatepicker from "./components/VueDatepicker.vue"
 
 </script>
 
 <template>
   <div class="p-10">
-    <CalendarMonth />
+    <VueDatepicker />
   </div>
 </template>

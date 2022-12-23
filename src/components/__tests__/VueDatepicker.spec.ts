@@ -1,10 +1,10 @@
 import { describe, it, expect, beforeEach } from 'vitest'
 
 import { mount } from '@vue/test-utils'
-import CalendarMonth from '../CalendarMonth.vue'
+import VueDatepicker from '../VueDatepicker.vue'
 
 describe('CalendarMonth', () => {
-  const wrapper = mount(CalendarMonth, {
+  const wrapper = mount(VueDatepicker, {
     global: {
       stubs: {
         FontAwesomeIcon: true
