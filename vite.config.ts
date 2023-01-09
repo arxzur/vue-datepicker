@@ -12,12 +12,12 @@ export default defineConfig({
       entry: resolve(__dirname, 'src/components/index.ts'),
       name: 'VueDatepicker',
       // the proper extensions will be added
-      fileName: 'vue-datepicker',
+      fileName: (format) => `vue-datepicker.${format}.js`,
     },
     rollupOptions: {
       // make sure to externalize deps that shouldn't be bundled
       // into your library
-      external: ['vue', 'moment', 'free-solid-svg-icons', 'fontawesome-svg-core', 'vue-fontawesome'],
+      external: ['vue', 'moment'],
       output: {
         // Provide global variables to use in the UMD build
         // for externalized deps

@@ -1,31 +1,82 @@
 # vue-datepicker
 
-This template should help get you started developing with Vue 3 in Vite.
+Vue/tailwind datepicker component. See [demo here](https://vitejs.dev/config/) and [source here](https://vitejs.dev/config/).
 
-## Recommended IDE Setup
-
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
-
-## Type Support for `.vue` Imports in TS
-
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
-
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
-
-1. Disable the built-in TypeScript Extension
-    1) Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-    2) Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
+## Install
 
 ```sh
-npm install
+npm i @arxzur/vue-datepicker
 ```
+
+## Basic usage
+
+### Import component styles
+
+```ts
+// main.ts
+import { createApp } from "vue";
+import App from "./App.vue";
+import "@arxzur/vue-datepicker/dist/index.css";
+
+createApp(App).mount("#app");
+```
+
+### Import Vue component
+
+```ts
+// App.vue
+<script setup lang="ts">
+import { VueDatepicker } from "@arxzur/vue-datepicker"
+
+</script>
+
+<template>
+  <VueDatepicker />
+</template>
+```
+
+## Available props
+
+```ts
+const props = withDefaults(defineProps<{
+  hasEventButton?: boolean
+  hasWeekNumbers?: boolean
+  hasYear?: boolean
+  weekdayNames?: string[]
+  eventButtonName?: string
+}>(), {
+  hasEventButton: true,
+  hasWeekNumbers: true,
+  hasYear: false,
+  weekdayNames: () => ["M", "T", "W", "T", "F", "S", "S"],
+  eventButtonName: "Add event",
+})
+```
+
+## Events emitted
+
+```ts
+// App.vue
+<script setup lang="ts">
+import VueDatepicker from "./components/VueDatepicker.vue"
+
+function selectDate(date: string) {
+  console.log(date) // YYYY-MM-DD
+}
+
+function addEvent() {
+  console.log("Button clicked!")
+}
+</script>
+
+<template>
+  <VueDatepicker @select-date="selectDate" @add-event="addEvent"/>
+</template>
+```
+
+## Contribute
+
+For contact, bug reports see [repo here](https://vitejs.dev/config/).
 
 ### Compile and Hot-Reload for Development
 
@@ -33,14 +84,18 @@ npm install
 npm run dev
 ```
 
-### Type-Check, Compile and Minify for Production
+### Build in library mode
 
 ```sh
-npm run build
+npm run build:lib
 ```
 
 ### Run Unit Tests with [Vitest](https://vitest.dev/)
 
 ```sh
-npm run test:unit
+npm run test:run
 ```
+
+## Licence
+
+This component is open-sourced software licensed under the [MIT license](https://vitejs.dev/config/).
