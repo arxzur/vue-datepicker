@@ -2,13 +2,6 @@
 
 Vue/tailwind datepicker component. See [demo here](https://codesandbox.io/embed/inspiring-ioana-6ns5vn?fontsize=14&hidenavigation=1&theme=dark/) and [source here](https://gitlab.com/arxzur/vue-datepicker/).
 
-<iframe src="https://codesandbox.io/embed/inspiring-ioana-6ns5vn?fontsize=14&hidenavigation=1&theme=dark"
-  style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
-  title="inspiring-ioana-6ns5vn"
-  allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
-  sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
-></iframe>
-
 ## Install
 
 ```sh
