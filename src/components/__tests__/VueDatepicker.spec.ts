@@ -3,13 +3,8 @@ import { describe, it, expect, beforeEach } from 'vitest'
 import { mount } from '@vue/test-utils'
 import VueDatepicker from '../VueDatepicker.vue'
 
-describe('CalendarMonth', () => {
+describe('VueDatepicker', () => {
   const wrapper = mount(VueDatepicker, {
-    global: {
-      stubs: {
-        FontAwesomeIcon: true
-      }
-    },
     props: { eventButtonName: 'My event button text' }
   })
 
@@ -19,7 +14,7 @@ describe('CalendarMonth', () => {
   it('renders event button text', () => {
     expect(wrapper.text()).toContain('My event button text')
   })
-  it('emits event on button click', async () => {
+  it('emits event when button is clicked', async () => {
     await wrapper.find('#event-button').trigger('click')
 
     expect(wrapper.emitted('addEvent')).toBeTruthy()
